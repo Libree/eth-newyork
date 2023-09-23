@@ -1,5 +1,5 @@
 // ** React Imports
-import { SyntheticEvent, useState } from 'react'
+import { ElementType, SyntheticEvent, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -22,81 +22,31 @@ import TabSecurity from 'src/views/account-settings/TabSecurity'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
+import { Button, ButtonProps, Grid } from '@mui/material'
+import { useGlobalModalsContext } from 'src/@core/context/globalModals'
+import { CreateCredentialModal } from 'src/@core/components/modals/CreateCredentialModal'
 
-const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
-  [theme.breakpoints.down('md')]: {
-    minWidth: 100
-  },
+const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htmlFor?: string }>(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
-    minWidth: 67
-  }
-}))
-
-const TabName = styled('span')(({ theme }) => ({
-  lineHeight: 1.71,
-  fontSize: '0.875rem',
-  marginLeft: theme.spacing(2.4),
-  [theme.breakpoints.down('md')]: {
-    display: 'none'
+    width: '100%',
+    textAlign: 'center'
   }
 }))
 
 const Credentials = () => {
-  // ** State
-  const [value, setValue] = useState<string>('account')
-
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
-    setValue(newValue)
-  }
+  const { open } = useGlobalModalsContext();
 
   return (
-    <Card>
-      <TabContext value={value}>
-        <TabList
-          onChange={handleChange}
-          aria-label='account-settings tabs'
-          sx={{ borderBottom: theme => `1px solid ${theme.palette.divider}` }}
-        >
-          <Tab
-            value='account'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <AccountOutline />
-                <TabName>Account</TabName>
-              </Box>
-            }
-          />
-          <Tab
-            value='security'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <LockOpenOutline />
-                <TabName>Security</TabName>
-              </Box>
-            }
-          />
-          <Tab
-            value='info'
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <InformationOutline />
-                <TabName>Info</TabName>
-              </Box>
-            }
-          />
-        </TabList>
+    <ApexChartWrapper>
+      <ButtonStyled component='label' variant='contained' onClick={() => open("createCredential")}>
+        Create credential
+      </ButtonStyled>
+      <Grid container spacing={6}>
+      </Grid>
 
-        <TabPanel sx={{ p: 0 }} value='account'>
-          <TabAccount />
-        </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='security'>
-          <TabSecurity />
-        </TabPanel>
-        <TabPanel sx={{ p: 0 }} value='info'>
-          <TabInfo />
-        </TabPanel>
-      </TabContext>
-    </Card>
+      <CreateCredentialModal />
+    </ApexChartWrapper>
   )
 }
 
