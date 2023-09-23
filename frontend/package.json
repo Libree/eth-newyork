@@ -44,6 +44,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "@apollo/client": "^3.8.4",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@emotion/server": "^11.11.0",
