@@ -43,11 +43,15 @@ export const CreateOportunityModal = () => {
         type: string;
         maxAmount: string;
         currency: string;
+        minRevenue: string;
+        minFollowers: string
     }>({
         name: '',
         type: '',
         maxAmount: '',
         currency: '',
+        minRevenue: '',
+        minFollowers: ''
     });
 
     const handleChangeInput = (e: any) => {
@@ -69,7 +73,6 @@ export const CreateOportunityModal = () => {
                     <CardContent>
                         <form>
                             <Grid container spacing={7}>
-
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         fullWidth
@@ -126,6 +129,26 @@ export const CreateOportunityModal = () => {
                                             ))}
                                         </Select>
                                     </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label='Min followers'
+                                        defaultValue=''
+                                        name="minFollowers"
+                                        value={input?.minFollowers}
+                                        onChange={handleChangeInput}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label='Min Revenue'
+                                        defaultValue=''
+                                        name="minRevenue"
+                                        value={input?.minRevenue}
+                                        onChange={handleChangeInput}
+                                    />
                                 </Grid>
 
                                 <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
