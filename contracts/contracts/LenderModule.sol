@@ -4,6 +4,7 @@ import {ModuleManager} from "@safe-global/safe-contracts/contracts/base/ModuleMa
 import {ISafe} from "./ISafe.sol";
 import {Enum} from "@safe-global/safe-contracts/contracts/common/Enum.sol";
 import {ProofVerifier} from "./ProofVerifier.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract LenderModule is ModuleManager {
     address verifierAddress;
@@ -39,5 +40,9 @@ contract LenderModule is ModuleManager {
             ),
             "Could not execute token transfer"
         );
+    }
+
+    function deposit(address _asset, uint256 _amount) external {
+        ERC20(_asset).transferFrom(msg.sender, address(this), _amount);
     }
 }
