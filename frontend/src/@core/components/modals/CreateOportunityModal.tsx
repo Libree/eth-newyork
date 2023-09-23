@@ -26,6 +26,16 @@ const modalContentStyle = {
     width: { md: 600 }
 }
 
+const currencyOptions = [
+    { value: 'usdc', label: 'USDC' },
+    { value: 'dai', label: 'DAI' },
+];
+
+const typeOptions = [
+    { value: 'grant', label: 'Grant' },
+    { value: 'loan', label: 'Loan' },
+];
+
 export const CreateOportunityModal = () => {
     const { isCreateOportunityOpen, close } = useGlobalModalsContext();
     const [input, setInput] = useState<{
@@ -81,8 +91,11 @@ export const CreateOportunityModal = () => {
                                             value={input?.type}
                                             onChange={handleChangeInput}
                                         >
-                                            <MenuItem value='grant'>Grant</MenuItem>
-                                            <MenuItem value='loan'>Loan</MenuItem>
+                                            {typeOptions.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -106,8 +119,11 @@ export const CreateOportunityModal = () => {
                                             value={input?.currency}
                                             onChange={handleChangeInput}
                                         >
-                                            <MenuItem value='usdc'>USDC</MenuItem>
-                                            <MenuItem value='dai'>DAI</MenuItem>
+                                            {currencyOptions.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                 </Grid>
