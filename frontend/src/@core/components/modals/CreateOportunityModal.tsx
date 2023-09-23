@@ -1,4 +1,21 @@
-import { Button, Card, CardContent, FormControl, Grid, InputLabel, MenuItem, Modal, Select, TextField } from "@mui/material";
+// ** React Imports
+import { useState } from "react";
+
+// ** MUI Imports
+import {
+    Button,
+    Card,
+    CardContent,
+    FormControl,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Modal,
+    Select,
+    TextField,
+} from "@mui/material";
+
+// ** Modal Context
 import { useGlobalModalsContext } from "../../context/globalModals"
 
 const modalContentStyle = {
@@ -11,8 +28,34 @@ const modalContentStyle = {
 
 export const CreateOportunityModal = () => {
     const { isCreateOportunityOpen, close } = useGlobalModalsContext();
+    const [input, setInput] = useState<{
+        name: string;
+        type: string;
+        maxAmount: string;
+        currency: string;
+    }>({
+        name: '',
+        type: '',
+        maxAmount: '',
+        currency: '',
+    });
+
+    const handleChangeInput = (e: any) => {
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleChangeSelect = (e: any) => {
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value
+        });
+    }
 
     const handleSubmitForm = () => {
+        console.log('input: ', input)
         close();
     }
 
@@ -25,24 +68,51 @@ export const CreateOportunityModal = () => {
                             <Grid container spacing={7}>
 
                                 <Grid item xs={12} sm={6}>
-                                    <TextField fullWidth label='Name' placeholder='Oportunity name' defaultValue='' />
+                                    <TextField
+                                        fullWidth
+                                        label='Name'
+                                        placeholder='Oportunity name'
+                                        defaultValue=''
+                                        name="name"
+                                        value={input?.name}
+                                        onChange={handleChangeInput}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <FormControl fullWidth>
                                         <InputLabel>Type</InputLabel>
-                                        <Select label='Type' defaultValue='grant'>
+                                        <Select
+                                            label='Type'
+                                            defaultValue='grant'
+                                            name="type"
+                                            value={input?.type}
+                                            onChange={handleChangeSelect}
+                                        >
                                             <MenuItem value='grant'>Grant</MenuItem>
                                             <MenuItem value='loan'>Loan</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField fullWidth label='Max amount' defaultValue='' />
+                                    <TextField
+                                        fullWidth
+                                        label='Max amount'
+                                        defaultValue=''
+                                        name="maxAmount"
+                                        value={input?.maxAmount}
+                                        onChange={handleChangeInput}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <FormControl fullWidth>
                                         <InputLabel>Currency</InputLabel>
-                                        <Select label='Curreny' defaultValue='usdc'>
+                                        <Select
+                                            label='Curreny'
+                                            defaultValue='usdc'
+                                            name="currency"
+                                            value={input?.currency}
+                                            onChange={handleChangeSelect}
+                                        >
                                             <MenuItem value='usdc'>USDC</MenuItem>
                                             <MenuItem value='dai'>DAI</MenuItem>
                                         </Select>
