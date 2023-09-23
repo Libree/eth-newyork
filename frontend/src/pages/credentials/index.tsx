@@ -41,7 +41,7 @@ const TabName = styled('span')(({ theme }) => ({
   }
 }))
 
-const AccountSettings = () => {
+const Credentials = () => {
   // ** State
   const [value, setValue] = useState<string>('account')
 
@@ -100,4 +100,4 @@ const AccountSettings = () => {
   )
 }
 
-export default AccountSettings
+export default Credentials
