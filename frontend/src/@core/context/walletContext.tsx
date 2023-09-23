@@ -40,10 +40,8 @@ export const WalletProvider: FC<Props> = ({ children }) => {
             chainConfig: {
                 chainNamespace: CHAIN_NAMESPACES.EIP155,
                 chainId: "0x5",
-                rpcTarget: "https://rpc.ankr.com/eth_goerli", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+                rpcTarget: "https://rpc.ankr.com/eth_goerli",
             },
-            // uiConfig refers to the whitelabeling options, which is available only on Growth Plan and above
-            // Please remove this parameter if you're on the Base Plan
             uiConfig: {
                 loginMethodsOrder: ["google", "github"],
                 defaultLanguage: "en",
@@ -100,11 +98,8 @@ export const WalletProvider: FC<Props> = ({ children }) => {
             console.log("safeAuth not initialized yet");
             return;
         }
-        const signInInfo = await safeAuth.signIn()
-        console.log('SIGN IN RESPONSE: ', signInInfo)
-
-        const userInfo = await safeAuth.getUserInfo()
-        console.log('USER INFO: ', userInfo)
+        const signInInfo = await safeAuth.signIn();
+        const userInfo = await safeAuth.getUserInfo();
 
         setSafeAuthSignInResponse(signInInfo)
         setUserInfo(userInfo || undefined)
