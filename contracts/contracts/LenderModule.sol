@@ -5,7 +5,7 @@ import {ISafe} from "./ISafe.sol";
 import {Enum} from "@safe-global/safe-contracts/contracts/common/Enum.sol";
 import {ProofVerifier} from "./ProofVerifier.sol";
 
-contract FounderTansfersModule is ModuleManager {
+contract LenderModule is ModuleManager {
     address verifierAddress;
 
     constructor(address _verifierAddress) {
