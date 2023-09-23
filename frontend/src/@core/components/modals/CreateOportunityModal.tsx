@@ -47,13 +47,6 @@ export const CreateOportunityModal = () => {
         });
     };
 
-    const handleChangeSelect = (e: any) => {
-        setInput({
-            ...input,
-            [e.target.name]: e.target.value
-        });
-    }
-
     const handleSubmitForm = () => {
         console.log('input: ', input)
         close();
@@ -86,7 +79,7 @@ export const CreateOportunityModal = () => {
                                             defaultValue='grant'
                                             name="type"
                                             value={input?.type}
-                                            onChange={handleChangeSelect}
+                                            onChange={handleChangeInput}
                                         >
                                             <MenuItem value='grant'>Grant</MenuItem>
                                             <MenuItem value='loan'>Loan</MenuItem>
@@ -111,7 +104,7 @@ export const CreateOportunityModal = () => {
                                             defaultValue='usdc'
                                             name="currency"
                                             value={input?.currency}
-                                            onChange={handleChangeSelect}
+                                            onChange={handleChangeInput}
                                         >
                                             <MenuItem value='usdc'>USDC</MenuItem>
                                             <MenuItem value='dai'>DAI</MenuItem>
