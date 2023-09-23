@@ -8,7 +8,7 @@ import {
 // ** Modal Context
 import { useGlobalModalsContext } from "../../context/globalModals";
 
-import { QRCodeSVG } from 'qrcode.react';
+import {QRCodeCanvas} from 'qrcode.react';
 
 const modalContentStyle = {
     position: 'absolute' as 'absolute',
@@ -25,20 +25,13 @@ export const ShowQRModal = () => {
             <Modal open={isShowQROpen} onClose={() => close("showQR")}>
                 <Card sx={modalContentStyle}>
                     <CardContent>
-                        <QRCodeSVG
-                            value={"https://picturesofpeoplescanningqrcodes.tumblr.com/"}
+                        <QRCodeCanvas
+                            value={'{"id":"a1862e84-3493-487f-827b-0db11b2ee35b","typ":"application/iden3comm-plain-json","type":"https://iden3-communication.io/authorization/1.0/request","thid":"a1862e84-3493-487f-827b-0db11b2ee35b","body":{"callbackUrl":"https://self-hosted-demo-backend-platform.polygonid.me/api/callback?sessionId=134636","reason":"test flow","scope":[{"id":1,"circuitId":"credentialAtomicQuerySigV2","query":{"allowedIssuers":["*"],"context":"https://dants.xyz/","credentialSubject":{"followers":{"$gt":1}},"type":"ProofOfInfluencer"}}]},"from":"did:polygonid:polygon:mumbai:2qLhNLVmoQS7pQtpMeKHDqkTcENBZUj1nkZiRNPGgV"}'}
+                            size={180}
                             bgColor={"#ffffff"}
                             fgColor={"#000000"}
                             level={"L"}
                             includeMargin={false}
-                            imageSettings={{
-                                src: "https://static.zpao.com/favicon.png",
-                                x: undefined,
-                                y: undefined,
-                                height: 24,
-                                width: 24,
-                                excavate: true,
-                            }}
                         />
                     </CardContent>
                 </Card>
