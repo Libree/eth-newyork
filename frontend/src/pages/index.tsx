@@ -4,10 +4,7 @@ import { ElementType } from 'react'
 import Grid from '@mui/material/Grid'
 
 // ** Icons Imports
-import Poll from 'mdi-material-ui/Poll'
 import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
-import BriefcaseVariantOutline from 'mdi-material-ui/BriefcaseVariantOutline'
 import { styled } from '@mui/material/styles'
 import Button, { ButtonProps } from '@mui/material/Button'
 
@@ -19,6 +16,7 @@ import CardStatisticsVerticalComponent from 'src/@core/components/card-statistic
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import { useGlobalModalsContext } from 'src/@core/context/globalModals'
 import { CreateOportunityModal } from 'src/@core/components/modals/CreateOportunityModal'
+import { ShowQRModal } from 'src/@core/components/modals/ShowQRModal'
 
 // ** Demo Components Imports
 
@@ -34,6 +32,10 @@ const Dashboard = () => {
   const { open } = useGlobalModalsContext();
 
   const onChange = () => {
+  }
+
+  const handleCardClick = () => {
+    open('showQR');
   }
 
   return (
@@ -55,6 +57,7 @@ const Dashboard = () => {
                 trendNumber=''
                 title='Noun DAO'
                 subtitle='Min folllowers 2k Min revenue 100$'
+                onClick={handleCardClick}
               />
             </Grid>
             <Grid item xs={6}>
@@ -66,12 +69,14 @@ const Dashboard = () => {
                 trendNumber=''
                 subtitle='Min folllowers 2k Min revenue 200$'
                 icon={<CurrencyUsd />}
+                onClick={handleCardClick}
               />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
 
+      <ShowQRModal />
       <CreateOportunityModal />
     </ApexChartWrapper>
   )

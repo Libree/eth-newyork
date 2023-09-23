@@ -12,4 +12,5 @@ export type CardStatsVerticalProps = {
   color?: ThemeColor
   trendNumber: string
   trend?: 'positive' | 'negative'
+  onClick?: () => void
 }

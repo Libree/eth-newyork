@@ -17,13 +17,7 @@ const modalContentStyle = {
     transform: 'translate(-50%, -50%)',
 }
 
-type ShowQRModalProps = {
-    value: string;
-};
-
-export const ShowQRModal = ({
-    value = "https://picturesofpeoplescanningqrcodes.tumblr.com/",
-}: ShowQRModalProps) => {
+export const ShowQRModal = () => {
     const { isShowQROpen, close } = useGlobalModalsContext();
 
     return (
@@ -32,7 +26,7 @@ export const ShowQRModal = ({
                 <Card sx={modalContentStyle}>
                     <CardContent>
                         <QRCodeSVG
-                            value={value}
+                            value={"https://picturesofpeoplescanningqrcodes.tumblr.com/"}
                             bgColor={"#ffffff"}
                             fgColor={"#000000"}
                             level={"L"}
