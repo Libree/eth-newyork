@@ -13,9 +13,9 @@ const navigation = (): VerticalNavItemsType => {
       path: '/'
     },
     {
-      title: 'Account Settings',
+      title: 'Your credentials',
       icon: AccountCogOutline,
-      path: '/account-settings'
+      path: '/credentials'
     },
   ]
 }
