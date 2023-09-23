@@ -13,6 +13,7 @@ import Magnify from 'mdi-material-ui/Magnify'
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
 import { Button } from '@mui/material'
+import { useWallet } from 'src/@core/hooks/useWallet'
 
 interface Props {
   hidden: boolean
@@ -27,8 +28,11 @@ const AppBarContent = (props: Props) => {
 
   // ** Hook
   const hiddenSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+  const { login } = useWallet();
 
-  const handleConnect = () => {};
+  const handleConnect = () => {
+    login();
+  };
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
