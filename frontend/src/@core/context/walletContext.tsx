@@ -101,7 +101,7 @@ export const WalletProvider: FC<Props> = ({ children }) => {
     
                 setWeb3auth(web3auth);
     
-                // await web3auth.initModal(); // -> its broking the app
+                await web3auth.initModal(); // -> its broking the app
                 setProvider(web3auth.provider);
     
                 if (web3auth.connected) {
@@ -118,7 +118,7 @@ export const WalletProvider: FC<Props> = ({ children }) => {
     const login = async () => {
         try {
             if (!web3auth) return;
-            await web3auth.initModal(); // -> this line brokes the app
+            // await web3auth.initModal(); // -> this line brokes the app
             const web3authProvider = await web3auth.connect();
             setProvider(web3authProvider);
         } catch (error) {
