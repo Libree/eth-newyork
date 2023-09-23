@@ -41,6 +41,9 @@ const Dashboard = () => {
       <ButtonStyled component='label' variant='contained' onClick={() => open()}>
         Create oportunity
       </ButtonStyled>
+      <br></br>
+      <br></br>
+      <br></br>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} lg={4}>
           <Grid container spacing={12}>
