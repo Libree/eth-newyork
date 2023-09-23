@@ -12,8 +12,9 @@ import Magnify from 'mdi-material-ui/Magnify'
 
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useWallet } from 'src/@core/hooks/useWallet'
+import { shortenAddress } from 'src/utils'
 
 interface Props {
   hidden: boolean
@@ -28,11 +29,11 @@ const AppBarContent = (props: Props) => {
 
   // ** Hook
   const hiddenSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-  const { login } = useWallet();
+  const { login, safeAuthSignInResponse, logout } = useWallet();
+  
+  const handleConnect = () => login();
 
-  const handleConnect = () => {
-    login();
-  };
+  const handleDisconnect = () => logout();
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -59,11 +60,24 @@ const AppBarContent = (props: Props) => {
         />
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button variant="contained" color="primary" onClick={handleConnect}>
-            Connect Wallet
-          </Button>
+        {safeAuthSignInResponse ? (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="body1" sx={{ mr: 2 }}>
+              {shortenAddress(safeAuthSignInResponse.eoa)}
+            </Typography>
+            <Button variant="outlined" color="primary" onClick={handleDisconnect}>
+              Disconnect
+            </Button>
+          </Box>
+        ) : (
+          <>
+            <Button variant="contained" color="primary" onClick={handleConnect}>
+              Connect Wallet
+            </Button>
+          </>
+        )}
       </Box>
-    </Box>
+    </Box >
   )
 }
 

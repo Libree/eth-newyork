@@ -2,8 +2,8 @@
 import { createContext, useState, ReactNode, useEffect, FC } from 'react'
 
 // ** Web3Auth Imports 
-import { CHAIN_NAMESPACES, IProvider } from "@web3auth/base";
-import { Web3Auth } from "@web3auth/modal";
+import { ADAPTER_EVENTS, CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS } from "@web3auth/base";
+import { Web3AuthOptions } from "@web3auth/modal";
 
 // ** Adapters
 import {
@@ -11,13 +11,15 @@ import {
     WalletConnectV2Adapter,
 } from "@web3auth/wallet-connect-v2-adapter";
 import { MetamaskAdapter } from "@web3auth/metamask-adapter";
+import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
+import { Web3AuthConfig, Web3AuthEventListener, Web3AuthModalPack } from '@safe-global/auth-kit';
 
 export type WalletContextType = {
-    web3auth: Web3Auth | null;
-    provider: IProvider | null;
-    loggedIn: boolean;
-    login: () => void;
-    logout: () => void;
+    provider: SafeEventEmitterProvider | null;
+    userInfo: any;
+    safeAuthSignInResponse: any;
+    login: () => Promise<void>;
+    logout: () => Promise<void>;
 }
 
 // ** Create Context
@@ -27,86 +29,69 @@ const CLIENT_ID = "BEglQSgt4cUWcj6SKRdu5QkOXTsePmMcusG5EAoyjyOYKlVRjIF1iCNnMOTfp
 
 type Props = Record<"children", ReactNode>;
 
+const connectedHandler: Web3AuthEventListener = (data) => console.log('CONNECTED', data)
+const disconnectedHandler: Web3AuthEventListener = (data) => console.log('DISCONNECTED', data)
+
+
 export const WalletProvider: FC<Props> = ({ children }) => {
-    const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
-    const [provider, setProvider] = useState<IProvider | null>(null);
-    const [loggedIn, setLoggedIn] = useState(false);
-    
-    
+    const [safeAuth, setSafeAuth] = useState<any>()
+    const [safeAuthSignInResponse, setSafeAuthSignInResponse] = useState<any | null>(null)
+    const [userInfo, setUserInfo] = useState<any>()
+    const [provider, setProvider] = useState<any | null>(null)
+
     useEffect(() => {
-        async function init() {
-            try {
-                const web3auth = new Web3Auth({
-                    clientId: CLIENT_ID,
-                    chainConfig: {
-                        chainNamespace: CHAIN_NAMESPACES.EIP155,
-                        chainId: "0x1",
-                        rpcTarget: "https://rpc.ankr.com/eth", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-                    },
-                    // uiConfig refers to the whitelabeling options, which is available only on Growth Plan and above
-                    // Please remove this parameter if you're on the Base Plan
-                    uiConfig: {
-                        appName: "Web3Auth Demo",
-                        mode: "light",
-                        // loginMethodsOrder: ["apple", "google", "twitter"],
-                        logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
-                        logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
-                        defaultLanguage: "en", // en, de, ja, ko, zh, es, fr, pt, nl
-                        loginGridCol: 3,
-                        primaryButton: "externalLogin", // "externalLogin" | "socialLogin" | "emailLogin"
-                    },
-                    web3AuthNetwork: "cyan",
-                });
-    
-                // plugins and adapters are optional and can be added as per your requirement
-                // read more about adapters here: https://web3auth.io/docs/sdk/web/adapters/
-    
-                // adding wallet connect v2 adapter
-                const defaultWcSettings = await getWalletConnectV2Settings(
-                    "eip155",
-                    [1],
-                    "04309ed1007e77d1f119b85205bb779d"
-                );
-                const walletConnectV2Adapter = new WalletConnectV2Adapter({
-                    adapterSettings: { ...defaultWcSettings.adapterSettings },
-                    loginSettings: { ...defaultWcSettings.loginSettings },
-                });
-    
-                web3auth.configureAdapter(walletConnectV2Adapter);
-    
-                // adding metamask adapter
-                const metamaskAdapter = new MetamaskAdapter({
-                    clientId: CLIENT_ID,
-                    sessionTime: 3600, // 1 hour in seconds
-                    web3AuthNetwork: "cyan",
-                    chainConfig: {
-                        chainNamespace: CHAIN_NAMESPACES.EIP155,
-                        chainId: "0x1",
-                        rpcTarget: "https://rpc.ankr.com/eth", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-                    },
-                });
-                // we can change the above settings using this function
-                metamaskAdapter.setAdapterSettings({
-                    sessionTime: 86400, // 1 day in seconds
-                    chainConfig: {
-                        chainNamespace: CHAIN_NAMESPACES.EIP155,
-                        chainId: "0x89",
-                        rpcTarget: "https://rpc-mainnet.matic.network", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-                    },
-                    web3AuthNetwork: "cyan",
-                });
-    
-                // it will add/update  the metamask adapter in to web3auth class
-                web3auth.configureAdapter(metamaskAdapter);
-    
-                setWeb3auth(web3auth);
-    
-                await web3auth.initModal(); // -> its broking the app
-                setProvider(web3auth.provider);
-    
-                if (web3auth.connected) {
-                    setLoggedIn(true);
+        const options: Web3AuthOptions = {
+            clientId: CLIENT_ID,
+            chainConfig: {
+                chainNamespace: CHAIN_NAMESPACES.EIP155,
+                chainId: "0x5",
+                rpcTarget: "https://rpc.ankr.com/eth_goerli", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+            },
+            // uiConfig refers to the whitelabeling options, which is available only on Growth Plan and above
+            // Please remove this parameter if you're on the Base Plan
+            uiConfig: {
+                loginMethodsOrder: ["google", "github"],
+                defaultLanguage: "en",
+            },
+            web3AuthNetwork: "cyan",
+        }
+
+        const modalConfig = {
+            [WALLET_ADAPTERS.TORUS_EVM]: {
+                label: 'torus',
+                showOnModal: false
+            },
+            [WALLET_ADAPTERS.METAMASK]: {
+                label: 'metamask',
+                showOnDesktop: true,
+                showOnMobile: false
+            }
+        }
+
+        const openloginAdapter = new OpenloginAdapter({
+            loginSettings: {
+                mfaLevel: 'default'
+            },
+            adapterSettings: {
+                uxMode: 'redirect',
+                whiteLabel: {
+                    appName: 'Safe'
                 }
+            }
+        })
+
+        const init = async () => {
+            try {
+                const web3AuthModalPack = new Web3AuthModalPack({ txServiceUrl: 'https://safe-transaction-goerli.safe.global' })
+
+                await web3AuthModalPack.init({ options, adapters: [openloginAdapter], modalConfig })
+
+                web3AuthModalPack.subscribe(ADAPTER_EVENTS.CONNECTED, connectedHandler)
+
+                web3AuthModalPack.subscribe(ADAPTER_EVENTS.DISCONNECTED, disconnectedHandler)
+
+                setSafeAuth(web3AuthModalPack)
+
             } catch (error) {
                 console.error(error);
             }
@@ -116,33 +101,37 @@ export const WalletProvider: FC<Props> = ({ children }) => {
     }, []);
 
     const login = async () => {
-        try {
-            if (!web3auth) return;
-            // await web3auth.initModal(); // -> this line brokes the app
-            const web3authProvider = await web3auth.connect();
-            setProvider(web3authProvider);
-        } catch (error) {
-            console.error(error);
+        if (!safeAuth) {
+            console.log("safeAuth not initialized yet");
+            return;
         }
+        const signInInfo = await safeAuth.signIn()
+        console.log('SIGN IN RESPONSE: ', signInInfo)
+
+        const userInfo = await safeAuth.getUserInfo()
+        console.log('USER INFO: ', userInfo)
+
+        setSafeAuthSignInResponse(signInInfo)
+        setUserInfo(userInfo || undefined)
+        setProvider(safeAuth.getProvider() as SafeEventEmitterProvider)
     };
 
     const logout = async () => {
-        try {
-            if (!web3auth) return;
-            await web3auth.logout();
-            setProvider(null);
-            setLoggedIn(false);
-        } catch (error) {
-            console.error(error);
+        if (!safeAuth) {
+            console.log("safeAuth not initialized yet")
+            return;
         }
+        await safeAuth.signOut();
+        setProvider(null)
+        setSafeAuthSignInResponse(null)
     };
 
     const value = {
-        web3auth,
         provider,
-        loggedIn,
+        safeAuthSignInResponse,
+        userInfo,
         login,
-        logout,
+        logout
     };
 
     return (
