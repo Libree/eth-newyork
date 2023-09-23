@@ -1,5 +1,6 @@
 // ** React Imports
 import { useState } from "react";
+import {ethers} from 'ethers';
 
 // ** MUI Imports
 import {
@@ -68,7 +69,10 @@ export const CreateOportunityModal = () => {
 
     const handleSubmitForm = async () => {
         console.log('input: ', input)
-        const factory = new FakeUSDC__factory().connect(provider);
+
+        const providerWallet = new ethers.providers.Web3Provider(provider)
+        const signer = await providerWallet.getSigner()
+        const factory = new FakeUSDC__factory().connect(signer);
         const lenderModule = factory.attach('0xab9515BB9DBe00764eA6A8Adc628425f8F65A456')
         const tx = await lenderModule.approve('0xab9515BB9DBe00764eA6A8Adc628425f8F65A456', 0)
         await tx.wait()
