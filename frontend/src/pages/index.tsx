@@ -46,44 +46,23 @@ const Dashboard = () => {
           <Grid container spacing={12}>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='$25.6k'
-                icon={<Poll />}
+                stats='Small Grants'
+                icon={<CurrencyUsd />}
                 color='success'
-                trendNumber='+42%'
-                title='Total Profit'
-                subtitle='Weekly Profit'
+                trendNumber=''
+                title='Noun DAO'
+                subtitle='Min folllowers 2k Min revenue 100$'
               />
             </Grid>
             <Grid item xs={6}>
               <CardStatisticsVerticalComponent
-                stats='$78'
-                title='Refunds'
+                stats='Small Grants'
+                title='Aave grants DAO'
                 trend='negative'
                 color='secondary'
-                trendNumber='-15%'
-                subtitle='Past Month'
+                trendNumber=''
+                subtitle='Min folllowers 2k Min revenue 200$'
                 icon={<CurrencyUsd />}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='862'
-                trend='negative'
-                trendNumber='-18%'
-                title='New Project'
-                subtitle='Yearly Project'
-                icon={<BriefcaseVariantOutline />}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CardStatisticsVerticalComponent
-                stats='15'
-                color='warning'
-                trend='negative'
-                trendNumber='-18%'
-                subtitle='Last Week'
-                title='Sales Queries'
-                icon={<HelpCircleOutline />}
               />
             </Grid>
           </Grid>
