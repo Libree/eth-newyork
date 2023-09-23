@@ -13,12 +13,13 @@ const GlobalModalsContext = createContext<GlobalModalsContextType>(
 
 type GlobalModalsContextType = {
     isCreateOportunityOpen: boolean;
+    isCreateCredentialOpen: boolean;
     isShowQROpen: boolean;
     open: (arg?: MenuTypes) => void;
     close: (arg?: MenuTypes) => void;
 };
 
-export type MenuTypes = "createOportunity" | "showQR";
+export type MenuTypes = "createOportunity" | "showQR" | "createCredential";
 
 type Props = Record<"children", ReactNode>;
 
@@ -27,11 +28,16 @@ const GlobalModalsProvider: FC<Props> = ({ children }) => {
         useState<GlobalModalsContextType["isCreateOportunityOpen"]>(false);
     const [isShowQROpen, setIsShowQROpen] =
         useState<GlobalModalsContextType["isShowQROpen"]>(false);
+    const [isCreateCredentialOpen, setIsCreateCredentialOpen] =
+        useState<GlobalModalsContextType["isCreateCredentialOpen"]>(false);
 
     const open = (type?: MenuTypes) => {
         switch (type) {
             case "showQR":
                 setIsShowQROpen(true);
+                break;
+            case "createCredential":
+                setIsCreateCredentialOpen(true);
                 break;
             default:
                 setIsCreateOportunityOpen(true);
@@ -44,6 +50,9 @@ const GlobalModalsProvider: FC<Props> = ({ children }) => {
             case "showQR":
                 setIsShowQROpen(false);
                 break;
+            case "createCredential":
+                setIsCreateCredentialOpen(false);
+                break;
             default:
                 setIsCreateOportunityOpen(false);
                 break;
@@ -54,10 +63,11 @@ const GlobalModalsProvider: FC<Props> = ({ children }) => {
         (): GlobalModalsContextType => ({
             isCreateOportunityOpen,
             isShowQROpen,
+            isCreateCredentialOpen,
             open,
             close,
         }),
-        [isCreateOportunityOpen, isShowQROpen]
+        [isCreateOportunityOpen, isShowQROpen, isCreateCredentialOpen]
     );
 
     return (
