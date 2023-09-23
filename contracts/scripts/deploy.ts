@@ -1,23 +1,29 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
 
-  const lockedAmount = ethers.utils.parseEther("0.001");
+  const verifierAddress = '0xbE653C043387342c037572aD642645bcCBBE6aDC';
+  const safeAddress = '0xbE653C043387342c037572aD642645bcCBBE6aDC';
+  const LenderModule = await ethers.getContractFactory("LenderModule");
+  const lenderModule = await LenderModule.deploy(verifierAddress);
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
+  await lenderModule.deployed();
 
   console.log(
-    `Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    `Deployed to ${lenderModule.address}`
   );
+
+  const FakeUSDC = await ethers.getContractFactory("FakeUSDC");
+  const fakeUSDC = await FakeUSDC.deploy('FUSDC', 'FUSDC', safeAddress);
+
+  await fakeUSDC.deployed();
+
+  console.log(
+    `Deployed to ${fakeUSDC.address}`
+  );
+
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
