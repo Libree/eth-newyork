@@ -1,5 +1,6 @@
 // ** MUI Imports
 import Box from '@mui/material/Box'
+import { Button, Typography } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
@@ -12,6 +13,9 @@ import Magnify from 'mdi-material-ui/Magnify'
 
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
+
+import { useWallet } from 'src/@core/hooks/useWallet'
+import { shortenAddress } from 'src/@core/utils'
 
 interface Props {
   hidden: boolean
@@ -26,6 +30,8 @@ const AppBarContent = (props: Props) => {
 
   // ** Hook
   const hiddenSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+
+  const { login, safeAuthSignInResponse, logout } = useWallet();
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -52,6 +58,22 @@ const AppBarContent = (props: Props) => {
         />
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+        {safeAuthSignInResponse ? (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="body1" sx={{ mr: 2 }}>
+              {shortenAddress(safeAuthSignInResponse.eoa)}
+            </Typography>
+            <Button variant="outlined" color="primary" onClick={logout}>
+              Disconnect
+            </Button>
+          </Box>
+        ) : (
+          <>
+            <Button variant="contained" color="primary" onClick={login}>
+              Connect Wallet
+            </Button>
+          </>
+        )}
       </Box>
     </Box>
   )
