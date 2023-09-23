@@ -17,6 +17,8 @@ import CardStatisticsVerticalComponent from 'src/@core/components/card-statistic
 
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
+import { useGlobalModalsContext } from 'src/@core/context/globalModals'
+import { CreateOportunityModal } from 'src/@core/components/modals/CreateOportunityModal'
 
 // ** Demo Components Imports
 
@@ -29,21 +31,15 @@ const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htm
 
 
 const Dashboard = () => {
+  const { open } = useGlobalModalsContext();
 
   const onChange = () => {
   }
 
   return (
     <ApexChartWrapper>
-      <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
+      <ButtonStyled component='label' variant='contained' onClick={() => open()}>
         Create oportunity
-        <input
-          hidden
-          type='file'
-          onChange={onChange}
-          accept='image/png, image/jpeg'
-          id='account-settings-upload-image'
-        />
       </ButtonStyled>
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} lg={4}>
@@ -93,6 +89,8 @@ const Dashboard = () => {
           </Grid>
         </Grid>
       </Grid>
+
+      <CreateOportunityModal />
     </ApexChartWrapper>
   )
 }

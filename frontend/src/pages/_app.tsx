@@ -20,6 +20,8 @@ import ThemeComponent from 'src/@core/theme/ThemeComponent'
 
 // ** Contexts
 import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext'
+import { WalletProvider } from 'src/@core/context/walletContext'
+import { GlobalModalsProvider } from 'src/@core/context/globalModals'
 
 // ** Utils Imports
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
@@ -29,7 +31,6 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import { WalletProvider } from 'src/@core/context/walletContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -71,15 +72,17 @@ const App = (props: ExtendedAppProps) => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 
-      <WalletProvider>
-        <SettingsProvider>
-          <SettingsConsumer>
-            {({ settings }) => {
-              return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
-            }}
-          </SettingsConsumer>
-        </SettingsProvider>
-      </WalletProvider>
+      <GlobalModalsProvider>
+        <WalletProvider>
+          <SettingsProvider>
+            <SettingsConsumer>
+              {({ settings }) => {
+                return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+              }}
+            </SettingsConsumer>
+          </SettingsProvider>
+        </WalletProvider>
+      </GlobalModalsProvider>
     </CacheProvider>
   )
 }
